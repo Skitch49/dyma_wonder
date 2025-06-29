@@ -9,8 +9,7 @@ Ce projet a été réalisé dans le cadre d’un tutoriel proposé par la platef
 
 ## 📸 Aperçu
 
-> ⚠️ Ajoute une capture d’écran ici si disponible  
-> `![Aperçu de Wonder](lien-vers-ton-image)`
+![Aperçu de Wonder](public/img/apercu.png)
 
 ---
 
