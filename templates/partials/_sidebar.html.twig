@@ -7,17 +7,24 @@
 	<ul
 		class="sidebar-nav py-20">
 		{# class="{{ app.request.pathinfo === path('home') ? 'active' : ''}}" #}
-		<a href="{{ path('home') }}" {% if app.request.pathinfo == path('home') %} ? class='active' {% endif %}>
-			<i class="fa-solid fa-house mr-5"></i>
-			Liste des Questions
-		</a>
+		<li>
+			<a href="{{ path('home') }}" {% if app.request.pathinfo == path('home') %} ? class='active' {% endif %}>
+				<i class="fa-solid fa-house mr-5"></i>
+				Liste des Questions
+			</a>
+		</li>
 
-		<a href="#">
-			<i class="fa-solid fa-pen mr-5"></i>
-			Mes questions</a>
+		<li>
+			<a href="{{ path('question_my_questions') }}" {% if app.request.pathinfo == path('question_my_questions') %} ? class='active' {% endif %}>
+				<i class="fa-solid fa-pen mr-5"></i>
+				Mes questions</a>
+		</li>
 
-		<a href="#">
-			<i class="fa-solid fa-puzzle-piece mr-5"></i>
-			Mes réponses</a>
+		<li>
+			<a href="{{ path('question_my_responses') }}" {% if app.request.pathinfo == path('question_my_responses') %} ? class='active' {% endif %}>
+				<i class="fa-solid fa-puzzle-piece mr-5"></i>
+				Mes réponses</a>
+		</li>
+
 	</ul>
 </div>

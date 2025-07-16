@@ -69,7 +69,7 @@ h5 {
 a {
     color: inherit;
     text-decoration: none;
-    display: block;
+    display: inline-block;
 }
 /* flex */
 
@@ -145,6 +145,10 @@ a {
 
 .mr-50 {
     margin-right: 50px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
 }
 
 .mb-20 {
@@ -235,6 +239,11 @@ small {
     width: 25px;
     border-radius: 50%;
 }
+
+.avatar-lg {
+    width: 40px;
+}
+
 
 .clickable {
     color: var(--primary);
@@ -396,4 +405,16 @@ textarea {
 
 .rating-down {
     color: var(--warning);
+}
+
+.question-text,
+.question-response-text {
+    line-height: var(--line-height-hight);
+    white-space: pre-wrap;
+}
+/* user profile */
+
+.profile-picture{
+width: 150px;
+border-radius: var(--border-radius);
 }

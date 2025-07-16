@@ -7,9 +7,22 @@
 			<i class="fas fa-search"></i>
 			<input type="text">
 		</div>
-		<div>
-			<button class="btn btn-primary mr-5">inscription</button>
-			<button class="btn btn-primary-stroke">Connexion</button>
-		</div>
+		{%- if is_granted('IS_AUTHENTICATED_FULLY') -%}
+			<div class="d-flex flex-row-nowrap justify-content-center">
+				<a href="{{ path('current_user')}}">
+					<img src="{{ app.user.picture }}" alt="{{app.user.firstname}}" class="avatar avatar-lg mr-10">
+				</a>
+				<small class="d-flex flex-column justify-content-center">
+					<a href="{{ path('logout')}}">Déconnexion</a>
+				</small>
+			</div>
+		{%- else -%}
+			<div>
+				<a href="{{ path('signup')}}" class="btn btn-primary mr-5">inscription</a>
+				<a href="{{ path('login')}}" class="btn btn-primary-stroke">Connexion</a>
+			</div>
+		{%- endif -%}
+
+
 	</div>
 </header>

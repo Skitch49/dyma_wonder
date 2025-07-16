@@ -18,30 +18,34 @@ class Question
     private ?int $id = null;
 
     #[Assert\NotBlank(message: "Votre titre est vide")]
-    #[Assert\Length(min:20,minMessage:"Veuillez détailler votre titre",max:255,maxMessage:"Le titre de votre question est trop long")]
+    #[Assert\Length(min: 20, minMessage: "Veuillez détailler votre titre", max: 255, maxMessage: "Le titre de votre question est trop long")]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
     #[Assert\NotBlank(message: "Votre contenu est vide")]
-    #[Assert\Length(min:100,minMessage:"Veuillez détailler votre question")]
+    #[Assert\Length(min: 100, minMessage: "Veuillez détailler votre question")]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     private ?int $rating = null;
 
-    #[Assert\PositiveOrZero(message:"Le nombre de réponses est négative")]
+    #[Assert\PositiveOrZero(message: "Le nombre de réponses est négative")]
     #[ORM\Column]
     private ?int $nbrOfResponse = null;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'question')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'question', orphanRemoval: true)]
     private Collection $comments;
+
+    #[ORM\ManyToOne(inversedBy: 'questions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
 
     public function __construct()
     {
@@ -77,14 +81,14 @@ class Question
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeImmutable $createAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -139,6 +143,18 @@ class Question
                 $comment->setQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

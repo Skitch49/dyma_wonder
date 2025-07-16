@@ -1,0 +1,66 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	{{user.fullname}}
+{% endblock %}
+
+{% block body %}
+	<div class="block mb-20">
+		<h2 class="pb-30">{{user.fullname}}</h2>
+		<div class="d-flex flex-row-nowrap">
+			<img src="{{user.picture}}" alt="{{user.fullname}}" class="mr-10 profile-picture">
+			<ul>
+				<li class="mb-10">
+					<strong class="mr-10 ">Prénom:</strong>
+					{{user.firstname}}
+				</li>
+				<li class="mb-10">
+					<strong class="mr-10 ">Nom:</strong>
+					{{user.lastname}}
+				</li>
+				<li class="mb-10">
+					<strong class="mr-10 ">Email:</strong>
+					{{user.email}}
+				</li>
+				<li class="mb-10">
+					<strong class="mr-10 ">Créer:</strong>
+					{{user.createdAt| date('d F Y')}}
+				</li>
+			</ul>
+		</div>
+	</div>
+
+
+	<div class="separator"></div>
+
+	<div class="block mb-20">
+		<h3 class="pb-30">Ses questions</h3>
+		{% if user.questions is not empty %}
+			<ul>
+
+				{% for question in user.questions %}
+					<li>{{question.title}}</li>
+				{% endfor %}
+
+			</ul>
+		{% else %}
+			<p>Cet utilisateur n'as pas encore posé de question.</p>
+		{% endif %}
+
+	</div>
+
+	<div class="block mb-20">
+		<h3 class="pb-30">Ses Réponses</h3>
+		{% if user.comments is not empty %}
+			<ul>
+
+				{% for comment in user.comments %}
+					<li>{{comment.content| slice(0,60) }}
+						...</li>
+				{% endfor %}
+			{% else %}
+				<p>Cet utilisateur n'as pas encore répondu a une question.</p>
+			{% endif %}
+
+		</ul>
+	</div>
+{% endblock %}
