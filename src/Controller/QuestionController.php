@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Question;
+use App\Entity\Vote;
 use App\Form\CommentForm;
 use App\Form\QuestionForm;
 use App\Repository\CommentRepository;
 use App\Repository\QuestionRepository;
+use App\Repository\VoteRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -96,21 +98,90 @@ class QuestionController extends AbstractController
     }
 
     #[Route('/rating/{id}/{score}', name: 'rating')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function ratingQuestion(Request $request, Question $question, int $score, EntityManagerInterface $em)
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    public function ratingQuestion(Request $request, Question $question, VoteRepository $voteRepo, int $score, EntityManagerInterface $em)
     {
-        $question->setRating($question->getRating() + $score);
-        $em->flush();
+        $user = $this->getUser();
+
+        // si utilisateur pas propiétaire de la question
+        if ($user !== $question->getAuthor()) {
+
+            //
+            $vote = $voteRepo->findBy(['author' => $user, 'question' => $question])[0] ?? null; // findBy retourne un tableau mais on sait qu'on retourne qu'un resultat
+            // Si il a déjà voté
+            if ($vote) {
+                // Si il a déja voté et revote pour la meme chose on supprime le vote
+                if ($vote->getIsLiked() && $score > 0 || (!$vote->getIsLiked() && $score < 0)) {
+                    $em->remove($vote);
+                    $question->setRating($question->getRating() + ($score > 0 ? -1 : 1));
+                }
+                // Si il a déja voté mais vote l'inverse
+                else {
+                    $vote->setIsLiked(!$vote->getIsLiked());
+                    $question->setRating($question->getRating() + ($score > 0 ? 2 : -2));
+                }
+            }
+            // Si il n'a pas déja voté
+            else {
+                $vote = new Vote();
+                $vote->setAuthor($user)
+                    ->setQuestion($question);
+
+                $vote->setIsLiked($score > 0 ? true : false);
+                $question->setRating($question->getRating() + $score);
+                $em->persist($vote);
+            }
+
+            $em->flush();
+        } else {
+            $this->addFlash('error', 'Vous ne pouvez pas noté votre propre question !');
+        }
+
+
         $referer = $request->server->get('HTTP_REFERER');
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('home');
     }
 
     #[Route('/comment/rating/{id}/{score}', name: 'comment_rating')]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function ratingComment(Request $request, Comment $comment, int $score, EntityManagerInterface $em)
+    #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
+    public function ratingComment(Request $request, Comment $comment, VoteRepository $voteRepo, int $score, EntityManagerInterface $em)
     {
-        $comment->setRating($comment->getRating() + $score);
-        $em->flush();
+        $user = $this->getUser();
+
+        // si utilisateur pas propiétaire de la réponse
+        if ($user !== $comment->getAuthor()) {
+
+            //
+            $vote = $voteRepo->findBy(['author' => $user, 'comment' => $comment])[0] ?? null; // findBy retourne un tableau mais on sait qu'on retourne qu'un resultat
+            // Si il a déjà voté
+            if ($vote) {
+                // Si il a déja voté et revote pour la meme chose on supprime le vote
+                if ($vote->getIsLiked() && $score > 0 || (!$vote->getIsLiked() && $score < 0)) {
+                    $em->remove($vote);
+                    $comment->setRating($comment->getRating() + ($score > 0 ? -1 : 1));
+                }
+                // Si il a déja voté mais vote l'inverse
+                else {
+                    $vote->setIsLiked(!$vote->getIsLiked());
+                    $comment->setRating($comment->getRating() + ($score > 0 ? 2 : -2));
+                }
+            }
+            // Si il n'a pas déja voté
+            else {
+                $vote = new Vote();
+                $vote->setAuthor($user)
+                    ->setComment($comment);
+
+                $vote->setIsLiked($score > 0 ? true : false);
+                $comment->setRating($comment->getRating() + $score);
+                $em->persist($vote);
+            }
+
+            $em->flush();
+        } else {
+            $this->addFlash('error', 'Vous ne pouvez pas noté votre propre réponse !');
+        }
+
         $referer = $request->server->get('HTTP_REFERER');
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('home');
     }
