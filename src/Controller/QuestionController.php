@@ -48,8 +48,10 @@ class QuestionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
-    public function show(Request $request, Question $question, EntityManagerInterface $em): Response
+    public function show(Request $request, QuestionRepository $questionRepo,int $id, EntityManagerInterface $em): Response
     {
+        $question = $questionRepo->getQuestionWithCommentsAndAuthors($id);
+
         $options = [
             'question' => $question
         ];
@@ -107,7 +109,7 @@ class QuestionController extends AbstractController
         if ($user !== $question->getAuthor()) {
 
             //
-            $vote = $voteRepo->findBy(['author' => $user, 'question' => $question])[0] ?? null; // findBy retourne un tableau mais on sait qu'on retourne qu'un resultat
+            $vote = $voteRepo->findOneBy(['author' => $user, 'question' => $question]); 
             // Si il a déjà voté
             if ($vote) {
                 // Si il a déja voté et revote pour la meme chose on supprime le vote
@@ -152,7 +154,7 @@ class QuestionController extends AbstractController
         if ($user !== $comment->getAuthor()) {
 
             //
-            $vote = $voteRepo->findBy(['author' => $user, 'comment' => $comment])[0] ?? null; // findBy retourne un tableau mais on sait qu'on retourne qu'un resultat
+            $vote = $voteRepo->findOneBy(['author' => $user, 'comment' => $comment]);
             // Si il a déjà voté
             if ($vote) {
                 // Si il a déja voté et revote pour la meme chose on supprime le vote

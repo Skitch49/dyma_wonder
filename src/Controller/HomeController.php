@@ -14,7 +14,7 @@ final class HomeController extends AbstractController
     public function index( QuestionRepository $questionRepo): Response
     {
 
-        $questions = $questionRepo->findBy([],['createdAt' => 'DESC']);
+        $questions = $questionRepo->getQuestionsWithAuthors();
                     
          
 
