@@ -29,11 +29,19 @@
 					<li>{{error.messageKey | trans(error.messageData,'security')}}</li>
 				</ul>
 			{% endif %}
+			<div class="d-flex flex-row">
+				<button class="btn btn-primary mr-10">Connexion</button>
+				<div class="d-flex flex-column">
+				<small>
+					<a href="{{ path('signup') }}">Vous n'avez pas de compte ?</a>
+				</small>
+				<small>
+					<a href="{{ path('reset-password-request') }}">Vous avez oublié votre mot de passe ?</a>
+				</small>
+				</div>
+				
+			</div>
 
-			<button class="btn btn-primary mr-10">Connexion</button>
-			<small>
-				<a href="{{ path('signup') }}">Vous n'avez pas de compte ?</a>
-			</small>
 		</form>
 	</div>
 
