@@ -2,7 +2,7 @@
 
 {% block styleSheets %}
 	{{ parent() }}
-	<link rel="stylesheet" href="{{ asset('css/question.css') }}">
+	{{ encore_entry_link_tags('question') }}
 {% endblock %}
 
 {% block title %}
