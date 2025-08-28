@@ -68,7 +68,7 @@ final class SecurityController extends AbstractController
     {
         // si l'utilisateur est connnecter
         if ($this->getUser()) {
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('current_user');
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();

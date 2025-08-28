@@ -1,0 +1,42 @@
+@use "../mixin" as *;
+
+header {
+    box-shadow: var(--box-shadow);
+}
+
+.header-logo {
+    width: 150px;
+}
+
+.header-logo img {
+    max-width: 150px;
+}
+
+.header-search {
+    border-radius: var(--border-radius);
+    background-color: var(--gray-light);
+    max-width: 400px;
+    margin: 0px 10px;
+    @include xs {
+        display: none;
+    }
+}
+.header-search input {
+    border: 0;
+    outline: 0;
+    background-color: var(--gray-light);
+}
+
+.burger {
+    font-size: var(--font-size-large);
+}
+
+.menu-xs {
+
+    a{
+        margin: 10px 15px;
+
+    }
+    border-bottom: var(--border);
+    box-shadow: var(--box-shadow);
+}

@@ -1,0 +1,36 @@
+.btn {
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+    border: 0;
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    transition: opacity 0.4s;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+.btn-small {
+    padding: 5px 15px;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.btn-warning {
+    background-color: var(--warning);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.btn-primary-stroke {
+    border: 1px solid var(--primary);
+    background-color: var(--color-primary);
+
+    color: var(--primary);
+    font-weight: 600;
+}

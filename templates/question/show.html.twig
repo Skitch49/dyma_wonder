@@ -10,14 +10,14 @@
 {% endblock %}
 
 {% block body %}
-	<div class="block">
+	<div class="block pos-relative-xs">
 		<div class="d-flex flex-row-nowrap">
 			{% include "partials/_rating.html.twig" with { rating: question.rating, from: 'question', id: question.id } %}
 			<div class="d-flex flex-column">
-				<div class="d-flex flex-row-nowrap align-items-center pb-30">
+				<div class="d-flex flex-row-nowrap align-items-center flex-column-xs question-header">
 					<h3 class="mr-10">{{ question.title }}</h3>
 					<div class="question-tag">QUESTION</div>
-					<a href="{{ path('user',{id: question.author.id})}}" class="ml-auto">
+					<a href="{{ path('user',{id: question.author.id})}}" class="ml-auto pos-absolute-xs avatar-link">
 						<img class="avatar " src="{{question.author.picture}}">
 					</a>
 				</div>

@@ -2,6 +2,8 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 		<title>
 			{% block title %}Welcome!
 			{% endblock %}
@@ -23,7 +25,7 @@
 	<body class="d-flex flex-column">
 		{{ include('partials/_header.html.twig') }}
 		<div class="app-content flex-fill  d-flex flex-row-nowrap justify-content-center">
-			<div class="content d-flex flex-row-nowrap flex-fill py-50">
+			<div class="content-main content d-flex flex-row-nowrap flex-column-xs flex-fill">
 				{{ include("partials/_sidebar.html.twig") }}
 				<div class="app-content flex-fill "> {% block body %}{% endblock %}
 					</div>
@@ -38,4 +40,3 @@
 			{{ include('partials/_footer.html.twig') }}
 		</body>
 	</html>
-</body></html>

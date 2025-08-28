@@ -1,0 +1,41 @@
+@use "../mixin" as *;
+.question-content {
+    border-bottom: 1px solid var(--gray-light);
+    max-width: 800px;
+    word-wrap: break-word;
+}
+
+.rating-up {
+    color: var(--primary);
+}
+
+.rating-down {
+    color: var(--warning);
+}
+
+.question-header {
+    padding-bottom: 30px;
+    @include xs {
+        padding-bottom: 10px;
+    }
+    .question-tag {
+        @include xs {
+            margin-top: 8px;
+        }
+    }
+}
+.question-text,
+.question-response-text {
+    line-height: var(--line-height-hight);
+    white-space: pre-wrap;
+    @include xs {
+        font-size: var(--font-size-small);
+        line-height: var(--line-height-hight-xs);
+    }
+}
+.avatar-link {
+    @include xs {
+        top: 6px;
+        right: 6px;
+    }
+}
