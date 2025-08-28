@@ -14,6 +14,9 @@ class UserForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $user = $builder->getData();
+
         $builder
             ->add('firstname', null, ['label' => '*Prénom'])
             ->add('lastname', null, ['label' => '*Nom'])
@@ -21,10 +24,11 @@ class UserForm extends AbstractType
             ->add('pictureFile', FileType::class, [
                 'label' => '*Image',
                 'mapped' => false,
+                'required' => $user?->getPicture() ? false : true,
                 'constraints' => [
                     new Image(
                         mimeTypesMessage:'Veuillez soumettre une image !',
-                        maxSize:'1M',
+                        maxSize:'2M',
                         maxSizeMessage:'Votre image fait plus de {{ size }} {{ suffix }} or, la limite est de {{ limit }} {{ suffix }}.'
                     )
                 ]

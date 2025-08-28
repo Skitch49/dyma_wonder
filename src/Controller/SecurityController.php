@@ -6,6 +6,7 @@ use DateTime;
 use App\Entity\User;
 use App\Form\UserForm;
 use DateTimeImmutable;
+use App\Service\Uploader;
 use App\Entity\ResetPassword;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +29,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class SecurityController extends AbstractController
 {
     #[Route('/signup', name: 'signup')]
-    public function signup(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer): Response
+    public function signup(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, MailerInterface $mailer, Uploader $uploader): Response
     {
         $user = new User();
         $userForm = $this->createForm(UserForm::class, $user);
@@ -38,12 +39,8 @@ final class SecurityController extends AbstractController
 
            
             /** @var UploadedFile $picture */
-            $picture = $userForm->get('pictureFile')->getData();
-            $folder = $this->getParameter('profile.folder');
-            $ext = $picture->guessExtension() ?? 'bin';
-            $filename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME) . '-' . bin2hex(random_bytes(12)) . $ext;
-            $picture->move($folder, $filename);
-            $user->setPicture($this->getParameter('profile.folder.public_path'.'/'.$filename));
+            $picture = $userForm->get('pictureFile')->getData();  
+            $user->setPicture($uploader->uploadProfileImage($picture));
 
             $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()))
                 ->setCreatedAt(new DateTimeImmutable());

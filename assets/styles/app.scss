@@ -246,12 +246,12 @@ small {
 .avatar {
     width: 25px;
     border-radius: 50%;
+    aspect-ratio: 1;
 }
 
 .avatar-lg {
     width: 40px;
 }
-
 
 .clickable {
     color: var(--primary);
@@ -422,7 +422,7 @@ textarea {
 }
 /* user profile */
 
-.profile-picture{
-width: 150px;
-border-radius: var(--border-radius);
+.profile-picture {
+    width: 150px;
+    border-radius: var(--border-radius);
 }
