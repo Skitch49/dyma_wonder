@@ -2,28 +2,28 @@
 
 namespace App\Controller;
 
-use App\Entity\ResetPassword;
+use DateTime;
 use App\Entity\User;
 use App\Form\UserForm;
-use App\Repository\ResetPasswordRepository;
-use App\Repository\UserRepository;
-use DateTime;
 use DateTimeImmutable;
+use App\Entity\ResetPassword;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ResetPasswordRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
-use Symfony\Component\RateLimiter\RateLimiterFactory;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class SecurityController extends AbstractController
 {
@@ -35,6 +35,16 @@ final class SecurityController extends AbstractController
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+
+           
+            /** @var UploadedFile $picture */
+            $picture = $userForm->get('pictureFile')->getData();
+            $folder = $this->getParameter('profile.folder');
+            $ext = $picture->guessExtension() ?? 'bin';
+            $filename = pathinfo($picture->getClientOriginalName(), PATHINFO_FILENAME) . '-' . bin2hex(random_bytes(12)) . $ext;
+            $picture->move($folder, $filename);
+            $user->setPicture($this->getParameter('profile.folder.public_path'.'/'.$filename));
+
             $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()))
                 ->setCreatedAt(new DateTimeImmutable());
             $em->persist($user);

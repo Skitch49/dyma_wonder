@@ -65,8 +65,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $comments;
 
     #[ORM\Column(length: 255)]
-    #[Assert\Url(message: 'Votre image doit provenir d\'une URL.')]
-    #[Assert\NotBlank(message: 'Veuillez renseigner une image de profil.')]
     private ?string $picture = null;
 
     #[ORM\Column]
