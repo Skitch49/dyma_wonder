@@ -25,8 +25,8 @@ Encore
 
     .copyFiles({
         from: "./assets/img",
-        pattern: /\.(png|jpg|jpeg|svg)$/,
-        to: "images/[path][name].[ext]"
+        pattern: /\.(png|jpg|jpeg|svg|gif)$/,
+        to: "images/[path][name].[ext]",
     })
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
@@ -67,11 +67,11 @@ Encore
     .enableSassLoader()
 
     // uncomment if you use TypeScript
-    .enableTypeScriptLoader();
+    .enableTypeScriptLoader()
+    .enableVueLoader();
 
 // uncomment if you use React
 //.enableReactPreset()
-
 // uncomment to get integrity="..." attributes on your script & link tags
 // requires WebpackEncoreBundle 1.4 or higher
 //.enableIntegrityHashes(Encore.isProduction())

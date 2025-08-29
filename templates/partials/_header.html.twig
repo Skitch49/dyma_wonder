@@ -3,9 +3,16 @@
 		<a href="{{ path('home')}}" class="header-logo">
 			<img src="{{ asset('build/images/logo.svg')}}" alt="Logo">
 		</a>
-		<div class="header-search p-10 flex-fill">
-			<i class="fas fa-search"></i>
-			<input type="text">
+		<div id="search" class="header-search p-10 flex-fill d-flex flex-row align-items-center">
+			<i class="fas fa-search mr-10"></i>
+			<input @input="updateInput" ref="input" type="text" class="flex-fill">
+			<img v-if="isLoading" src="{{ asset('build/images/loading.gif')}}" alt="loader" class="header-search-loading">
+			<ul v-if="questions?.length" class="header-search-result d-flex flex-column">
+				<a v-for="question in questions" :key="question.id" :href="'/question/' + question.id">${ question.title }$</a>
+			</ul>
+			<p v-else-if="$refs.input && $refs.input.value.length > 0 && !questions?.length" class="header-search-result header-search-empty">
+				Aucun résultat trouvé...
+			</p>
 		</div>
 		{%- if is_granted('IS_AUTHENTICATED_FULLY') -%}
 			<div class="d-flex flex-row-nowrap justify-content-center hide-xs">
@@ -31,7 +38,7 @@
 
 	{% if  is_granted('IS_AUTHENTICATED_FULLY')  %}
 		<a href="{{ path('current_user') }}" class="btn btn-primary mr-5">Profil</a>
-		
+
 		<a href="{{ path('logout') }}" class="btn btn-warning">Déconnexion</a>
 	{% else %}
 		<a href="{{ path('signup')}}" class="btn btn-primary mr-5">inscription</a>

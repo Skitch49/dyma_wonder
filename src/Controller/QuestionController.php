@@ -48,7 +48,7 @@ class QuestionController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
-    public function show(Request $request, QuestionRepository $questionRepo,int $id, EntityManagerInterface $em): Response
+    public function show(Request $request, QuestionRepository $questionRepo, int $id, EntityManagerInterface $em): Response
     {
         $question = $questionRepo->getQuestionWithCommentsAndAuthors($id);
 
@@ -109,7 +109,7 @@ class QuestionController extends AbstractController
         if ($user !== $question->getAuthor()) {
 
             //
-            $vote = $voteRepo->findOneBy(['author' => $user, 'question' => $question]); 
+            $vote = $voteRepo->findOneBy(['author' => $user, 'question' => $question]);
             // Si il a déjà voté
             if ($vote) {
                 // Si il a déja voté et revote pour la meme chose on supprime le vote
@@ -186,5 +186,16 @@ class QuestionController extends AbstractController
 
         $referer = $request->server->get('HTTP_REFERER');
         return $referer ? $this->redirect($referer) : $this->redirectToRoute('home');
+    }
+
+    #[Route('/search/{search}', name: "search", priority: 1)]
+    public function questionSearch(string $search = "none", QuestionRepository $questionRepository)
+    {
+        if ($search === "none") {
+            $questions = [];
+        } else {
+            $questions = $questionRepository->findBySearch($search);
+        }
+        return $this->json(json_encode($questions));
     }
 }
