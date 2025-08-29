@@ -17,7 +17,7 @@
 		{%- if is_granted('IS_AUTHENTICATED_FULLY') -%}
 			<div class="d-flex flex-row-nowrap justify-content-center hide-xs">
 				<a href="{{ path('current_user')}}">
-					<img src="{{ app.user.picture }}" alt="{{app.user.firstname}}" class="avatar avatar-lg mr-10">
+					<img src="{{ asset(app.user.picture) }}" alt="{{app.user.firstname}}" class="avatar avatar-lg mr-10">
 				</a>
 				<small class="d-flex flex-column justify-content-center">
 					<a href="{{ path('logout')}}">Déconnexion</a>
